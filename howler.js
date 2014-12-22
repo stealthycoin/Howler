@@ -39,6 +39,8 @@ var howler = (function() {
             }
         },
 
+        // Load a batch of templates, and then perform some action
+        // through a callback
         batch: function(names, cb) {
             if (!loaded) return;
             if (batching) {
@@ -46,10 +48,13 @@ var howler = (function() {
                 return;
             }
 
+            // Setup batch loading
             batching = true;
             callback = cb;
             counter = templates.length || 0;
             target = counter + names.length;
+
+            // Load all templates sequentially
             for (var i in names) {
                 howler.load(names[i]);
             }
@@ -58,12 +63,16 @@ var howler = (function() {
 
         load: function(name) {
             if (!loaded) return;
+            // Make a call to load the temolate
             $.ajax({
                 url: path + name,
                 type: "GET",
                 cached: true,
             }).done(function(data) {
+                // Use the construction function to construct a template from the retrieved data
                 templates[name] = construction(data);
+
+                // If we are batching, check to see if we are done and perform actions
                 if (batching) {
                     counter++;
                     if (counter === target) {
