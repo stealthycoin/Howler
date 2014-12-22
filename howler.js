@@ -4,8 +4,12 @@ var howler = (function() {
     var batching = false;
     var callback;
     var templates = {};
-
+    var path;
     return {
+        init: function(_path) {
+            path = _path;
+        },
+
         fetch: function(name) {
             if (name in templates) {
                 return templates[name];
@@ -33,7 +37,7 @@ var howler = (function() {
 
         load: function(name) {
             $.ajax({
-                url: "/static/tmpl/" + name,
+                url: path + name,
                 type: "GET",
                 cached: true,
             }).done(function(data) {
