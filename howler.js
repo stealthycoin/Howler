@@ -1,16 +1,25 @@
+
 var howler = (function() {
 
+    // Batch loading variables (only one batch can be loaded at a time for the moment)
     var counter, target;
     var batching = false;
     var callback;
-    var templates = {};
+
+    // Template loading variables
+    var loaded = false;
     var path;
+    var templates = {};
+
     return {
+        ///
         init: function(_path) {
             path = _path;
+            loaded = true;
         },
 
         fetch: function(name) {
+            if (!loaded) return;
             if (name in templates) {
                 return templates[name];
             }
@@ -20,6 +29,7 @@ var howler = (function() {
         },
 
         batch: function(names, cb) {
+            if (!loaded) return;
             if (batching) {
                 console.log("Can only load one batch at a time.");
                 return;
@@ -36,6 +46,7 @@ var howler = (function() {
         },
 
         load: function(name) {
+            if (!loaded) return;
             $.ajax({
                 url: path + name,
                 type: "GET",
