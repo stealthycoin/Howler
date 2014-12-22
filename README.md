@@ -1,4 +1,4 @@
-Howler
+Howler.js
 ======
 
 Small lib for fetching templates from the server.
