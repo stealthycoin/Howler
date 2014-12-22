@@ -6,7 +6,7 @@ Small lib for fetching templates from the server.
 Example
 -------------
 Example of using handlebars templates
-```Javascript
+```javascript
 howler.init("/static/templates/", Handlebars.compile);
 howler.batch(["title.html", "preview.html"], init);
 
