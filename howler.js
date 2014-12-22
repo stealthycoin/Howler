@@ -5,19 +5,30 @@ var howler = (function() {
     var counter, target;
     var batching = false;
     var callback;
+    var Q = [];
 
     // Template loading variables
     var loaded = false;
     var path;
     var templates = {};
 
+    function clear_Q() {
+        if (Q.length !== 0) {
+            var t = Q.shift();
+            howler.batch(t[0], t[1]);
+        }
+    }
+
     return {
-        ///
-        init: function(_path) {
+        // Set the path on the server to the template directory
+        init: function(_path, _construction) {
             path = _path;
+            // Default construction function to the identity function
+            construction = _construction || function(x) {return x;};
             loaded = true;
         },
 
+        // Fetch a template function
         fetch: function(name) {
             if (!loaded) return;
             if (name in templates) {
@@ -31,7 +42,7 @@ var howler = (function() {
         batch: function(names, cb) {
             if (!loaded) return;
             if (batching) {
-                console.log("Can only load one batch at a time.");
+                Q.push([names, cb]);
                 return;
             }
 
@@ -52,12 +63,13 @@ var howler = (function() {
                 type: "GET",
                 cached: true,
             }).done(function(data) {
-                templates[name] = Handlebars.compile(data);
+                templates[name] = construction(data);
                 if (batching) {
                     counter++;
                     if (counter === target) {
                         batching = false;
                         callback();
+                        clear_Q();
                     }
                 }
             }).fail(function(xhr) {
