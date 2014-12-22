@@ -1,4 +1,3 @@
-
 var howler = (function() {
 
     // Batch loading variables (only one batch can be loaded at a time for the moment)
