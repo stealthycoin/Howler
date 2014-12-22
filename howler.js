@@ -11,6 +11,7 @@ var howler = (function() {
     var path;
     var templates = {};
 
+    // Clears the Q of waiting batches
     function clear_Q() {
         if (Q.length !== 0) {
             var t = Q.shift();
