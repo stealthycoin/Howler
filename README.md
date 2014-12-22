@@ -7,8 +7,10 @@ Example
 -------------
 Example of using handlebars templates
 ```javascript
-howler.init("/static/templates/", Handlebars.compile);
-howler.batch(["title.html", "preview.html"], init);
+$(document).ready(function (){
+    howler.init("/static/templates/", Handlebars.compile);
+    howler.batch(["title.html", "preview.html"], init);
+});
 
 function init() {
     $("#title").html(howler.fetch("title.html")({"title": title}));
