@@ -1,3 +1,4 @@
+// Howler module
 var howler = (function() {
 
     // Batch loading variables (only one batch can be loaded at a time for the moment)
@@ -61,9 +62,10 @@ var howler = (function() {
 
         },
 
+        // Loads a single template with the given name
         load: function(name) {
             if (!loaded) return;
-            // Make a call to load the temolate
+            // Make a call to load the template
             $.ajax({
                 url: path + name,
                 type: "GET",
