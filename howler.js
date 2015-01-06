@@ -20,6 +20,17 @@ var howler = (function() {
         }
     }
 
+    function update_batch() {
+        if (batching) {
+            counter++;
+            if (counter === target) {
+                batching = false;
+                callback();
+                clear_Q();
+            }
+        }
+    }
+
     return {
         // Set the path on the server to the template directory
         init: function(_path, _construction) {
@@ -74,16 +85,9 @@ var howler = (function() {
                 // Use the construction function to construct a template from the retrieved data
                 templates[name] = construction(data);
 
-                // If we are batching, check to see if we are done and perform actions
-                if (batching) {
-                    counter++;
-                    if (counter === target) {
-                        batching = false;
-                        callback();
-                        clear_Q();
-                    }
-                }
+                update_batch();
             }).fail(function(xhr) {
+                update_batch();
                 console.log(xhr);
             });
         }
